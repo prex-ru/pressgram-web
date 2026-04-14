@@ -115,6 +115,18 @@ export async function showError(title: string, messages?: string[]): Promise<voi
 }
 
 export async function showIncompatibleBrowser(onAccept: () => void): Promise<void> {
+    // Pressgram: delegate to the static /unsupported_browser.html page which is
+    // branded and localised. The upstream React UnsupportedBrowserView still
+    // ships in the bundle (other callers may reach it) but the primary entry
+    // point goes through the static page so users see the right message even
+    // when React itself fails to mount.
+    const pressgramHook = (window as unknown as { pressgramShowUnsupported?: () => void })
+        .pressgramShowUnsupported;
+    if (typeof pressgramHook === "function") {
+        pressgramHook();
+        return;
+    }
+
     const { UnsupportedBrowserView } = await import(
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"

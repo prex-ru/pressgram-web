@@ -713,6 +713,8 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     "res/manifest.json",
                     "res/welcome.html",
                     "res/custom.css",
+                    "res/pressgram-compat.js",
+                    "res/unsupported_browser.html",
                     { from: "welcome/**", context: path.resolve(__dirname, "res") },
                     { from: "themes/**", context: path.resolve(__dirname, "res") },
                     { from: "vector-icons/**", context: path.resolve(__dirname, "res") },

@@ -27,6 +27,10 @@
     <meta name="twitter:title" content="Pressgram" />
     <meta name="twitter:description" content="Независимая площадка для российского медиасообщества." />
     <meta name="twitter:image" content="<%= og_image_url %>" />
+    <!-- Pressgram browser compat: runs before the bundle so localStorage
+         flags and the pressgramShowUnsupported hook exist when init.tsx
+         decides whether to show the upstream UnsupportedBrowserView. -->
+    <script src="pressgram-compat.js"></script>
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'none';
         style-src 'self' 'unsafe-inline' <%= csp_extra_source %>;
