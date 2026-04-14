@@ -1,105 +1,223 @@
 <!doctype html>
 <!--
-    Please note: This page is similar to the one at mobile.element.io so any changes made here can potentially
-    be applied to that site as well. They still share the mobile-apps.ts file for updating the app metadata.
+  Pressgram mobile_guide template. Kept in sync with the upstream ID
+  contract (header_title, step1_heading, app_store_link, play_store_link,
+  f_droid_link, f_droid_section, step2_container, step2_description,
+  deep_link_button, back_to_element_button, mx_HomePage_container,
+  mx_HomePage_errorContainer) so the mobileguide entry chunk keeps
+  populating store URLs and deep-link without modification.
+
+  The mobileguide JS bundle is injected by HtmlWebpackPlugin (see
+  apps/web/webpack.config.ts — chunks: ["mobileguide"]).
 -->
-<html lang="en">
-    <head>
-        <title>Element Mobile Guide</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="apple-itunes-app" content="app-id=id1631335820" />
-    </head>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pressgram — мобильное приложение</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-itunes-app" content="app-id=id1631335820" />
+    <link rel="icon" type="image/x-icon" href="<%= require('../../../res/favicon.ico') %>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --bg: #FAFAF8;
+        --bg-warm: #F3F1EC;
+        --text: #1A1917;
+        --text-mid: #4A4843;
+        --text-light: #7A7770;
+        --accent: #1071E0;
+        --accent-hover: #0D5FBF;
+        --border: #DDD9D2;
+        --border-light: #ECEAE5;
+        --serif: 'Fraunces', Georgia, serif;
+        --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+      }
+      html { font-size: 17px; -webkit-font-smoothing: antialiased; }
+      body { font-family: var(--sans); color: var(--text); background: var(--bg); line-height: 1.65; min-height: 100vh; display: flex; flex-direction: column; }
+      ::selection { background: var(--accent); color: #fff; }
 
-    <body>
-        <div class="mx_HomePage_errorContainer">
-            <!-- populated by JS if needed -->
+      .page { flex: 1; max-width: 480px; margin: 0 auto; padding: 2.5rem 1.5rem 3rem; width: 100%; text-align: center; }
+
+      .brand { display: flex; align-items: center; justify-content: center; gap: .6rem; margin-bottom: 2.2rem; }
+      .brand svg { width: 32px; height: 32px; flex-shrink: 0; }
+      .brand-name { font-family: var(--serif); font-weight: 600; font-size: 1.3rem; letter-spacing: -.02em; }
+
+      .title { font-family: var(--serif); font-weight: 700; font-size: 1.8rem; line-height: 1.2; letter-spacing: -.02em; margin-bottom: .7rem; }
+      .subtitle { color: var(--text-mid); font-size: 1rem; margin-bottom: 2rem; }
+
+      .notice { background: var(--bg-warm); border: 1px solid var(--border-light); border-top: 3px solid var(--accent); border-radius: 10px; padding: 1.1rem 1.2rem; margin-bottom: 2.5rem; text-align: center; }
+      .notice-title { font-family: var(--serif); font-weight: 600; font-size: 1.02rem; margin-bottom: .45rem; }
+      .notice-text { color: var(--text-mid); font-size: .92rem; line-height: 1.6; }
+
+      .step { display: flex !important; flex-direction: column; align-items: center; gap: .9rem; margin-bottom: 2.5rem; }
+      .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 600; font-size: .95rem; display: flex; align-items: center; justify-content: center; }
+      .step-body { width: 100%; }
+      .step h2 { font-family: var(--serif); font-weight: 600; font-size: 1.25rem; line-height: 1.3; margin-bottom: .6rem; }
+      .step p { color: var(--text-mid); font-size: .95rem; margin-bottom: 1rem; }
+
+      .stores { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-bottom: .9rem; }
+      .stores a { display: inline-block; text-decoration: none; transition: opacity .2s; }
+      .stores a:hover { opacity: .85; }
+      .stores img { display: block; height: 44px; width: auto; }
+
+      .f-droid { font-size: .86rem; color: var(--text-light); }
+      .f-droid a { color: var(--accent); text-decoration: none; }
+      .f-droid a:hover { text-decoration: underline; }
+
+      #step2_container { display: none !important; }
+      #step2_container[data-visible="true"] { display: flex !important; }
+
+      .btn { display: inline-flex; align-items: center; justify-content: center; background: var(--accent); color: #fff; font-family: var(--sans); font-size: .84rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: .85rem 1.8rem; border-radius: 9px; text-decoration: none; transition: background .2s; }
+      .btn:hover { background: var(--accent-hover); }
+
+      .back { margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light); font-size: .88rem; color: var(--text-light); }
+      .back a { color: var(--accent); text-decoration: none; }
+      .back a:hover { text-decoration: underline; }
+
+      footer { padding: 3rem 1.5rem 2.5rem; border-top: 1px solid var(--border); text-align: center; }
+      .footer-brand { display: flex; align-items: center; justify-content: center; gap: .45rem; margin-bottom: .7rem; }
+      .footer-brand svg { width: 20px; height: 20px; }
+      .footer-brand span { font-family: var(--serif); font-weight: 600; font-size: .85rem; color: var(--text); letter-spacing: -.01em; }
+      .footer-text { font-size: .74rem; color: var(--text-light); line-height: 1.7; }
+      .footer-text a { color: var(--accent); text-decoration: none; }
+      .footer-text a:hover { text-decoration: underline; }
+      .footer-sep { margin: 0 .3rem; }
+
+      .mx_HomePage_errorContainer { color: #b00; padding: 1rem; background: #fff2f2; border: 1px solid #ffd1d1; border-radius: 8px; margin-bottom: 1.5rem; font-size: .9rem; }
+      .mx_HomePage_errorContainer:empty { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="mx_HomePage_errorContainer"><!-- populated by JS if needed --></div>
+
+      <div class="mx_HomePage_container">
+        <div class="brand">
+          <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="300" height="300" rx="150" fill="#1071E0" />
+            <path d="M100.541 150.415H120V224.24H100.541V150.415Z" fill="white" />
+            <path d="M180.811 150C180.811 132.82 167.198 118.894 150.405 118.894C133.613 118.894 120 132.82 120 150C120 167.179 133.613 181.106 150.405 181.106V201.013C122.866 201.013 100.541 178.174 100.541 150C100.541 121.826 122.866 98.9858 150.405 98.9858C177.945 98.9858 200.27 121.826 200.27 150C200.27 178.174 177.945 201.013 150.405 201.013V181.106C167.198 181.106 180.811 167.179 180.811 150Z" fill="white" />
+            <path d="M150 60C199.706 60 240 100.294 240 150C240 199.706 199.706 240 150 240C145.595 240 141.263 239.683 137.027 239.072V218.911C141.222 219.685 145.556 220.092 150 220.092C189.379 220.092 220.541 188.286 220.541 150C220.541 111.714 189.379 79.9078 150 79.9078C110.621 79.9078 79.4595 111.714 79.4595 150C79.4595 177.824 95.858 202.181 120 213.462V234.877C85.0445 222.522 60 189.186 60 150C60 100.294 100.294 60 150 60Z" fill="white" />
+          </svg>
+          <span class="brand-name">Pressgram</span>
         </div>
 
-        <div class="mx_HomePage_container">
-            <header>
-                <div class="mx_HomePage_header">
-                    <div>
-                        <img src="./assets/element-logo.svg" alt="Element Logo" width="148px" height="32px" />
-                    </div>
-                    <div>
-                        <p id="header_title">Join Element.</p>
-                    </div>
-                </div>
-                <hr />
-            </header>
+        <h1 class="title" id="header_title">Вход в&nbsp;Pressgram с&nbsp;телефона</h1>
+        <p class="subtitle">Веб-версия не&nbsp;предназначена для мобильных устройств. Установите приложение — это займёт минуту.</p>
 
-            <main>
-                <div class="mx_HomePage_col mx_Spacer">
-                    <p>
-                        The <a id="back_to_element_button" href="#" class="mx_DesktopLink">desktop site</a> does
-                        <b>not</b> work on mobile, please download the app.
-                    </p>
-                </div>
-                <div class="mx_HomePage_col mx_Spacer">
-                    <div class="mx_HomePage_row">
-                        <div class="mx_HomePage_step_number">
-                            <span>1</span>
-                        </div>
-                        <div>
-                            <h1 id="step1_heading">Download Element</h1>
-                            <div class="mx_StoreLinks">
-                                <a
-                                    href="https://apps.apple.com/app/element-x-secure-chat-call/id1631335820"
-                                    target="_blank"
-                                    class="mx_StoreBadge"
-                                    id="app_store_link"
-                                >
-                                    <img
-                                        src="./assets/app-store-badge.svg"
-                                        alt="Download on the App Store."
-                                        width="120px"
-                                        height="40px"
-                                    />
-                                </a>
-                                <a
-                                    href="https://play.google.com/store/apps/details?id=io.element.android.x"
-                                    target="_blank"
-                                    class="mx_StoreBadge"
-                                    id="play_store_link"
-                                >
-                                    <img
-                                        src="./assets/google-play-badge.svg"
-                                        alt="Get it on Google Play."
-                                        width="135px"
-                                        height="40px"
-                                    />
-                                </a>
-                            </div>
-                            <p id="f_droid_section">
-                                Also available on
-                                <a
-                                    href="https://f-droid.org/packages/io.element.android.x"
-                                    target="_blank"
-                                    class="mx_ClearDecoration"
-                                    id="f_droid_link"
-                                    >F-Droid</a
-                                >
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div id="step2_container" class="mx_HomePage_col mx_Spacer" style="display: none">
-                    <div class="mx_HomePage_row">
-                        <div class="mx_HomePage_step_number">
-                            <span>2</span>
-                        </div>
-                        <div>
-                            <h1>Come back here to sign in</h1>
-                            <p id="step2_description">This will set up your app</p>
-                            <a class="mx_Button" id="deep_link_button" href="#">Sign in</a>
-                        </div>
-                    </div>
-                </div>
-            </main>
+        <div class="notice">
+          <div class="notice-title">Нативные приложения Pressgram в&nbsp;разработке</div>
+          <div class="notice-text">Пока пользуйтесь Element X — надёжным open-source приложением на&nbsp;протоколе Matrix. Ваш аккаунт и&nbsp;чаты работают в&nbsp;нём без ограничений.</div>
         </div>
 
-        <footer>
-            <div class="mx_BottomGradient"></div>
-        </footer>
-    </body>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h2 id="step1_heading">Скачайте Element X</h2>
+            <div class="stores">
+              <a href="https://apps.apple.com/app/element-x-secure-chat-call/id1631335820" target="_blank" id="app_store_link" rel="noopener">
+                <img src="./assets/app-store-badge.svg" alt="Загрузить в App Store" height="44" />
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=io.element.android.x" target="_blank" id="play_store_link" rel="noopener">
+                <img src="./assets/google-play-badge.svg" alt="Доступно в Google Play" height="44" />
+              </a>
+            </div>
+            <p class="f-droid" id="f_droid_section">
+              Также доступно в&nbsp;<a href="https://f-droid.org/packages/io.element.android.x" target="_blank" id="f_droid_link" rel="noopener">F-Droid</a>
+            </p>
+          </div>
+        </div>
+
+        <div id="step2_container" class="step" style="display: none">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h2>Вернитесь сюда, чтобы войти</h2>
+            <p id="step2_description">Мы настроим приложение автоматически, чтобы вручную не&nbsp;пришлось указывать адрес сервера Pressgram.</p>
+            <a class="btn" id="deep_link_button" href="#">Войти в&nbsp;Pressgram</a>
+          </div>
+        </div>
+
+        <div class="back">
+          Попали на&nbsp;эту страницу с&nbsp;десктопа? <a id="back_to_element_button" href="#">Перейти в&nbsp;веб-версию Pressgram</a>.
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-brand">
+        <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="300" height="300" rx="150" fill="#1071E0" />
+          <path d="M100.541 150.415H120V224.24H100.541V150.415Z" fill="white" />
+          <path d="M180.811 150C180.811 132.82 167.198 118.894 150.405 118.894C133.613 118.894 120 132.82 120 150C120 167.179 133.613 181.106 150.405 181.106V201.013C122.866 201.013 100.541 178.174 100.541 150C100.541 121.826 122.866 98.9858 150.405 98.9858C177.945 98.9858 200.27 121.826 200.27 150C200.27 178.174 177.945 201.013 150.405 201.013V181.106C167.198 181.106 180.811 167.179 180.811 150Z" fill="white" />
+          <path d="M150 60C199.706 60 240 100.294 240 150C240 199.706 199.706 240 150 240C145.595 240 141.263 239.683 137.027 239.072V218.911C141.222 219.685 145.556 220.092 150 220.092C189.379 220.092 220.541 188.286 220.541 150C220.541 111.714 189.379 79.9078 150 79.9078C110.621 79.9078 79.4595 111.714 79.4595 150C79.4595 177.824 95.858 202.181 120 213.462V234.877C85.0445 222.522 60 189.186 60 150C60 100.294 100.294 60 150 60Z" fill="white" />
+        </svg>
+        <span>Pressgram</span>
+      </div>
+      <p class="footer-text">Независимая площадка для&nbsp;российского медиасообщества<br><a href="mailto:iwantto@pressgram.ru">iwantto@pressgram.ru</a> <span class="footer-sep">&middot;</span> Проект <a href="https://prexplore.ru" target="_blank" rel="noopener" style="color:#f3372a">PRexplore</a> и&nbsp;<a href="https://prex.ru" target="_blank" rel="noopener">PREX</a></p>
+    </footer>
+
+    <script>
+      // mobileguide.js rewrites header_title/step1_heading/step2_description in English
+      // on each initPage run. Observe and restore Russian wording after it finishes.
+      (function () {
+        var russian = {
+          header_title: 'Вход в\u00a0Pressgram с\u00a0телефона',
+          step1_heading: 'Скачайте Element X',
+          step2_description: 'Мы настроим приложение автоматически, чтобы вручную не\u00a0пришлось указывать адрес сервера Pressgram.'
+        };
+        function restore() {
+          Object.keys(russian).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el && el.innerText !== russian[id]) el.innerText = russian[id];
+          });
+        }
+        var observer = new MutationObserver(restore);
+        ['header_title', 'step1_heading', 'step2_description'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) observer.observe(el, { childList: true, characterData: true, subtree: true });
+        });
+        // Also run on load/DOMContentLoaded in case bundle runs synchronously with defer
+        if (document.readyState === 'complete') restore();
+        else window.addEventListener('load', restore);
+
+        // /join/<server>/<token> links save the target server in sessionStorage
+        // before Element Web redirects the mobile browser to /mobile_guide/.
+        // Pick it up and rewrite the deep-link to that server instead of the default.
+        var targetServer = null;
+        try { targetServer = sessionStorage.getItem('pressgram_server'); } catch (e) {}
+        if (!targetServer) {
+          var qs = new URLSearchParams(location.search);
+          targetServer = qs.get('server');
+        }
+        if (!targetServer && document.referrer) {
+          var rm = document.referrer.match(/[?&]server=([^&]+)/) || document.referrer.match(/\/join\/([^\/?#]+)/);
+          if (rm) targetServer = decodeURIComponent(rm[1]);
+        }
+        if (targetServer) {
+          var fixDeepLink = function () {
+            var btn = document.getElementById('deep_link_button');
+            if (!btn) return;
+            var desired = 'https://mobile.element.io/element?account_provider=' + encodeURIComponent(targetServer);
+            if (btn.href !== desired) btn.href = desired;
+          };
+          fixDeepLink();
+          var btnEl = document.getElementById('deep_link_button');
+          if (btnEl) new MutationObserver(fixDeepLink).observe(btnEl, { attributes: true, attributeFilter: ['href'] });
+        }
+
+        // mobileguide.js sets step2_container.style.display = 'block' which breaks
+        // the vertical flex layout. Watch for the inline style change and flip our
+        // data-visible attribute so CSS can apply display:flex instead.
+        var step2 = document.getElementById('step2_container');
+        if (step2) {
+          new MutationObserver(function () {
+            step2.dataset.visible = (step2.style.display && step2.style.display !== 'none') ? 'true' : 'false';
+          }).observe(step2, { attributes: true, attributeFilter: ['style'] });
+        }
+      })();
+    </script>
+  </body>
 </html>
