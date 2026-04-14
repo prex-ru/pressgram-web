@@ -104,10 +104,68 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     const urlWithoutQuery = window.location.protocol + "//" + window.location.host + window.location.pathname;
     logger.log("Vector starting at " + urlWithoutQuery);
 
+    // Pressgram deep-link: /join/<server>/<token> pretty-URL or ?server=&token= query.
+    // Allows admins to share links like:
+    //   https://pgram.im/join/news.pgram.im/PREX2026
+    //   https://pgram.im/?server=news.pgram.im&token=PREX2026
+    // so non-technical users don't have to type server names or paste invite codes.
+    // Requires nginx SPA fallback (try_files ... /index.html) for path-based form.
+    let serverOverride: string | undefined;
+    let regToken: string | undefined;
+    const pathMatch = window.location.pathname.match(/^\/join\/([^/]+)(?:\/([^/]+))?\/?$/);
+    if (pathMatch) {
+        serverOverride = decodeURIComponent(pathMatch[1]);
+        if (pathMatch[2]) regToken = decodeURIComponent(pathMatch[2]);
+        // Rewrite URL to clean root so reload / share doesn't re-trigger.
+        window.history.replaceState(null, "", "/" + window.location.hash);
+    } else {
+        if (typeof params.server === "string" && params.server.length > 0) serverOverride = params.server;
+        if (typeof params.token === "string" && params.token.length > 0) regToken = params.token;
+    }
+
+    // Persist server override across OIDC round-trips (MAS cancel/error returns us here
+    // without the deep-link params). Cleared only when user explicitly closes the tab or
+    // we call sessionStorage.removeItem on successful login.
+    try {
+        if (serverOverride) {
+            sessionStorage.setItem("pressgram_server_override", serverOverride);
+        } else {
+            const stored = sessionStorage.getItem("pressgram_server_override");
+            if (stored) serverOverride = stored;
+        }
+    } catch {
+        // sessionStorage may be unavailable (private mode / quota); deep-link still works one-shot.
+    }
+
+    if (regToken) {
+        // Cookie readable by MAS on auth.*.pgram.im — picked up by registration_token.html
+        // template JS to pre-fill the invite code field.
+        const cookieDomain = inferPressgramCookieDomain(window.location.hostname);
+        const secure = window.location.protocol === "https:" ? "; Secure" : "";
+        document.cookie =
+            `pressgram_reg_token=${encodeURIComponent(regToken)}` +
+            (cookieDomain ? `; domain=${cookieDomain}` : "") +
+            `; path=/; max-age=3600; SameSite=Lax${secure}`;
+        logger.log("Pressgram: stored registration token in cookie for MAS pre-fill");
+    }
+
+    if (serverOverride && regToken && !window.location.hash) {
+        // Magic-link with token → take user straight to registration screen.
+        window.location.hash = "#/register";
+    }
+
+    if ((serverOverride || regToken) && !pathMatch) {
+        // Strip deep-link params from URL so they don't leak on reload / share.
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete("server");
+        cleanUrl.searchParams.delete("token");
+        window.history.replaceState(null, "", cleanUrl.href);
+    }
+
     platform?.startUpdater();
 
     // Don't bother loading the app until the config is verified
-    const config = await verifyServerConfig();
+    const config = await verifyServerConfig(serverOverride);
     const snakedConfig = new SnakedObject<IConfigOptions>(config);
 
     // Before we continue, let's see if we're supposed to do an SSO redirect
@@ -167,7 +225,34 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     );
 }
 
-async function verifyServerConfig(): Promise<IConfigOptions> {
+// Pressgram: return the parent cookie domain (e.g. ".pgram.im") so MAS on auth.*.pgram.im
+// can read the registration token cookie. Returns undefined for non-matching hosts
+// (e.g. localhost or custom deployments) — cookie then falls back to host-only.
+function inferPressgramCookieDomain(hostname: string): string | undefined {
+    const parts = hostname.split(".");
+    if (parts.length < 2) return undefined;
+    // Take the registrable domain (last two labels): pgram.im, pgram.io, example.com
+    return "." + parts.slice(-2).join(".");
+}
+
+async function verifyServerConfig(serverNameOverride?: string): Promise<IConfigOptions> {
+    // Pressgram: if deep-link server override fails to resolve (typo, dead server),
+    // silently fall back to the default server instead of showing the error page.
+    if (serverNameOverride) {
+        try {
+            return await verifyServerConfigInner(serverNameOverride);
+        } catch (e) {
+            logger.warn(
+                `Pressgram: deep-link server "${serverNameOverride}" failed to validate, ` +
+                    `falling back to default server config`,
+                e,
+            );
+        }
+    }
+    return verifyServerConfigInner(undefined);
+}
+
+async function verifyServerConfigInner(serverNameOverride?: string): Promise<IConfigOptions> {
     let validatedConfig: ValidatedServerConfig;
     try {
         logger.log("Verifying homeserver configuration");
@@ -183,9 +268,16 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
 
         const config = SdkConfig.get();
         let wkConfig = config["default_server_config"]; // overwritten later under some conditions
-        const serverName = config["default_server_name"];
+        let serverName = config["default_server_name"];
         const hsUrl = config["default_hs_url"];
         const isUrl = config["default_is_url"];
+
+        // Pressgram deep-link: if ?server= was passed, discover that server instead of the default.
+        if (serverNameOverride) {
+            logger.log(`Pressgram: overriding default server with ${serverNameOverride}`);
+            serverName = serverNameOverride;
+            wkConfig = undefined; // force .well-known lookup for the override
+        }
 
         const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
         if (hsUrl && (wkConfig || serverName)) {
