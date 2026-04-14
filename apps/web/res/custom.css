@@ -1,0 +1,72 @@
+/* Pressgram theme override for Element Web.
+   Remaps hardcoded var(--cpd-color-green-*) references (message bubbles,
+   reactions, badges, etc.) onto the pressgram-blue scale from our
+   compound-design-tokens fork. This also catches success-state tokens
+   as a side effect, which are then restored to real green by the second
+   rule below. */
+:root,
+.cpd-theme-light,
+.cpd-theme-dark,
+.cpd-theme-light-hc,
+.cpd-theme-dark-hc {
+    --cpd-color-green-100: var(--cpd-color-pressgram-blue-100);
+    --cpd-color-green-200: var(--cpd-color-pressgram-blue-200);
+    --cpd-color-green-300: var(--cpd-color-pressgram-blue-300);
+    --cpd-color-green-400: var(--cpd-color-pressgram-blue-400);
+    --cpd-color-green-500: var(--cpd-color-pressgram-blue-500);
+    --cpd-color-green-600: var(--cpd-color-pressgram-blue-600);
+    --cpd-color-green-700: var(--cpd-color-pressgram-blue-700);
+    --cpd-color-green-800: var(--cpd-color-pressgram-blue-800);
+    --cpd-color-green-900: var(--cpd-color-pressgram-blue-900);
+    --cpd-color-green-1000: var(--cpd-color-pressgram-blue-1000);
+    --cpd-color-green-1100: var(--cpd-color-pressgram-blue-1100);
+    --cpd-color-green-1200: var(--cpd-color-pressgram-blue-1200);
+    --cpd-color-green-1300: var(--cpd-color-pressgram-blue-1300);
+    --cpd-color-green-1400: var(--cpd-color-pressgram-blue-1400);
+}
+
+/* Restore success semantic tokens to real green (hex from upstream compound).
+   The global remap above made text/icon/bg/border success tokens blue; put
+   them back on green so "verified", "encrypted", and other secure-state
+   indicators keep their conventional green. Bubble backgrounds stay blue
+   because those reference the primitive --cpd-color-green-300 directly. */
+:root,
+.cpd-theme-light,
+.cpd-theme-dark,
+.cpd-theme-light-hc,
+.cpd-theme-dark-hc {
+    --cpd-color-text-success-primary: #007a61;
+    --cpd-color-icon-success-primary: #007a61;
+    --cpd-color-bg-success-subtle: #f1fbf6;
+    --cpd-color-border-success-subtle: #98e1c1;
+}
+
+/* .mx_RoomHeader .mx_FacePile.mx_FacePile_toggled combines bg-success-subtle
+   (green) with text-action-accent (now blue). Force text to success-primary
+   so both match. */
+.mx_RoomHeader .mx_FacePile.mx_FacePile_toggled {
+    color: var(--cpd-color-text-success-primary) !important;
+}
+
+/* Dark-theme sender message bubbles use --cpd-color-green-300 directly, and
+   our global remap sends that to Leonardo-generated pressgram-blue-300 which
+   in the dark theme is near-black-navy (#000274). Override with a subtler
+   dark blue so bubbles are recognisable but not overwhelming. */
+.cpd-theme-dark {
+    --cpd-color-green-300: #17233d;
+}
+
+/* compound-web Badge kind="green" uses var(--cpd-color-alpha-green-300) for
+   background and var(--cpd-color-green-1100) for text. Our global green →
+   pressgram remap flipped the text blue but not the alpha background
+   (alpha-green-* is a separate token group), giving blue-on-green. Scope a
+   local override on the badge element so it goes fully green again —
+   "Encrypted" badges are success indicators, not brand accent. */
+[data-kind="green"] {
+    --cpd-color-alpha-green-300: #f1fbf6;
+    --cpd-color-green-1100: #005c45;
+}
+.cpd-theme-dark [data-kind="green"] {
+    --cpd-color-alpha-green-300: #0b382a;
+    --cpd-color-green-1100: #a1e8ce;
+}

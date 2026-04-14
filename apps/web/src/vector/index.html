@@ -53,6 +53,9 @@
         <% }
     } %>
 
+    <!-- Pressgram overrides: loaded after theme CSS so remaps win. -->
+    <link rel="stylesheet" href="custom.css">
+
     <% for (const tag of htmlWebpackPlugin.tags.headTags) {
         let path = tag.attributes && tag.attributes.href;
         if (path && path.includes("/Inter/")) { %>
