@@ -18,9 +18,6 @@ catalogs:
     '@playwright/test':
       specifier: 1.58.2
       version: 1.58.2
-    '@vector-im/compound-design-tokens':
-      specifier: 7.0.0
-      version: 7.0.0
     '@vector-im/compound-web':
       specifier: 8.4.0
       version: 8.4.0
@@ -41,6 +38,7 @@ catalogs:
       version: 5.9.3
 
 overrides:
+  '@vector-im/compound-design-tokens': github:prex-ru/pressgram-compound-design-tokens#main
   pretty-format@30>react-is: 19.2.4
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
@@ -356,11 +354,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       '@vector-im/compound-design-tokens':
-        specifier: 'catalog:'
-        version: 7.0.0(@types/react@19.2.10)(react@19.2.4)
+        specifier: github:prex-ru/pressgram-compound-design-tokens#main
+        version: '@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972(@types/react@19.2.10)(react@19.2.4)'
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 8.4.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@7.0.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 8.4.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972(@types/react@19.2.10)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@vector-im/matrix-wysiwyg':
         specifier: 2.40.0
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.2.4)
@@ -933,8 +931,8 @@ importers:
         specifier: ^1.7.0
         version: 1.16.0
       '@vector-im/compound-design-tokens':
-        specifier: 'catalog:'
-        version: 7.0.0(@types/react@19.2.10)(react@19.2.4)
+        specifier: github:prex-ru/pressgram-compound-design-tokens#main
+        version: '@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972(@types/react@19.2.10)(react@19.2.4)'
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -1040,7 +1038,7 @@ importers:
         version: 8.57.2(eslint@8.57.1)(typescript@5.9.3)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 8.4.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@7.0.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 8.4.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972(@types/react@19.2.10)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@vitest/browser-playwright':
         specifier: ^4.0.17
         version: 4.1.0(playwright@1.58.2)(vite@8.0.1(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.6.1)(sugarss@5.0.1(postcss@8.5.8))(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.3))(vitest@4.1.0)
@@ -3812,6 +3810,18 @@ packages:
   '@posthog/types@1.360.2':
     resolution: {integrity: sha512-U48CbtmX5kETZvWjaJVlublSA1aLV99m71TQtgxWksBMXINS/3C7j+KqlMO6wH7SuaEZQnjaxh1KYGH4nRCaaA==}
 
+  '@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972':
+    resolution: {tarball: https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972}
+    version: 10.1.0-pressgram.0
+    peerDependencies:
+      '@types/react': ^19.2.10
+      react: ^17 || ^18 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+
   '@principalstudio/html-webpack-inject-preload@1.2.7':
     resolution: {integrity: sha512-KJKkiKG63ugBjf8U0e9jUcI9CLPTFIsxXplEDE0oi3mPpxd90X9SJovo3W2l7yh/ARKIYXhQq8fSXUN7M29TzQ==}
     engines: {node: '>=10.23'}
@@ -5596,19 +5606,9 @@ packages:
   '@upsetjs/venn.js@2.0.0':
     resolution: {integrity: sha512-WbBhLrooyePuQ1VZxrJjtLvTc4NVfpOyKx0sKqioq9bX1C1m7Jgykkn8gLrtwumBioXIqam8DLxp88Adbue6Hw==}
 
-  '@vector-im/compound-design-tokens@7.0.0':
-    resolution: {integrity: sha512-8GTccJ9WfLsTr3eZ6o+ujN4+UfwTIe7a937+tA+kG+KaY1tXwhIQLSccvX72GqG1kSLGLCcpwfdf5NTGoAJJ9A==}
-    peerDependencies:
-      '@types/react': ^19.2.10
-      react: ^17 || ^18 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      react:
-        optional: true
-
   '@vector-im/compound-web@8.4.0':
     resolution: {integrity: sha512-xScGP2UP04qxXBCI6D7MfzwfT0w+8k5sepXehaHleLZX0pykdPFeFp+P1WJz2NocQgEnqWIYHrp50kMrYzs0fA==}
+    version: 8.4.0
     peerDependencies:
       '@fontsource/inconsolata': ^5
       '@fontsource/inter': ^5
@@ -8328,7 +8328,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+    deprecated: Glob versions prior to v9 are no longer supported
 
   global-agent@3.0.0:
     resolution: {integrity: sha512-PT6XReJ+D07JvGoxQMkT6qji/jVNfX/h364XHZOWeRzy64sSFr+xJ5OX7LI3b4MPQzdL4H8Y8M0xzPpsVMwA8Q==}
@@ -16400,6 +16400,11 @@ snapshots:
 
   '@posthog/types@1.360.2': {}
 
+  '@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972(@types/react@19.2.10)(react@19.2.4)':
+    optionalDependencies:
+      '@types/react': 19.2.10
+      react: 19.2.4
+
   '@principalstudio/html-webpack-inject-preload@1.2.7(html-webpack-plugin@5.6.6(webpack@5.105.3))(webpack@5.105.3)':
     dependencies:
       html-webpack-plugin: 5.6.6(webpack@5.105.3)
@@ -18207,12 +18212,7 @@ snapshots:
       d3-selection: 3.0.0
       d3-transition: 3.0.1(d3-selection@3.0.0)
 
-  '@vector-im/compound-design-tokens@7.0.0(@types/react@19.2.10)(react@19.2.4)':
-    optionalDependencies:
-      '@types/react': 19.2.10
-      react: 19.2.4
-
-  '@vector-im/compound-web@8.4.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@7.0.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@vector-im/compound-web@8.4.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972(@types/react@19.2.10)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@floating-ui/react': 0.27.17(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@fontsource/inconsolata': 5.2.8
@@ -18223,7 +18223,7 @@ snapshots:
       '@radix-ui/react-progress': 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-separator': 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-slot': 1.2.4(@types/react@19.2.10)(react@19.2.4)
-      '@vector-im/compound-design-tokens': 7.0.0(@types/react@19.2.10)(react@19.2.4)
+      '@vector-im/compound-design-tokens': '@prex-ru/pressgram-compound-design-tokens@https://codeload.github.com/prex-ru/pressgram-compound-design-tokens/tar.gz/6205436b292d240b29d3d8d6ff20b122c4ec9972(@types/react@19.2.10)(react@19.2.4)'
       classnames: 2.5.1
       react: 19.2.4
       vaul: 1.1.2(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)

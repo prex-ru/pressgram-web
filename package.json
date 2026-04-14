@@ -81,6 +81,7 @@
             "react-beautiful-dnd": "13"
         },
         "overrides": {
+            "@vector-im/compound-design-tokens": "github:prex-ru/pressgram-compound-design-tokens#main",
             "pretty-format@30>react-is": "19.2.4",
             "@types/react": "catalog:",
             "@types/react-dom": "catalog:",
