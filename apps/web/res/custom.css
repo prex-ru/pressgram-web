@@ -70,3 +70,48 @@
     --cpd-color-alpha-green-300: #0b382a;
     --cpd-color-green-1100: #a1e8ce;
 }
+
+/* Hide unencrypted-state indicators on the main (non-E2EE) server.
+   The main Pressgram server uses transport-only encryption by design — no
+   need to startle users with open-lock icons when there's no E2EE to
+   advertise. Encryption-enabled indicators (closed lock, green "encrypted"
+   badges) remain visible on E2EE-enabled servers that also load this
+   stylesheet. */
+
+/* Composer lock icon: only hide when label says "not encrypted". Wrapper is
+   hidden via :has() so the space around the icon collapses. Closed-lock
+   icon on E2EE servers has a different aria-label and stays visible. */
+.mx_MessageComposer_e2eIcon[aria-label*="не защищены"],
+.mx_MessageComposer_e2eIcon[aria-label*="not end-to-end encrypted"],
+.mx_MessageComposer_e2eIconWrapper:has(.mx_MessageComposer_e2eIcon[aria-label*="не защищены"]),
+.mx_MessageComposer_e2eIconWrapper:has(.mx_MessageComposer_e2eIcon[aria-label*="not end-to-end encrypted"]) {
+    display: none !important;
+}
+
+/* Timeline banner "Сквозное шифрование не включено" — EventTileBubble with
+   .mx_cryptoEvent renders inside DM rooms on the main server because
+   Element expects E2EE in DMs. Hide only the UNSUPPORTED variant (icon
+   rendered with color="critical"). ENABLED/ENABLED_DM/CHANGED variants
+   use color="primary" and stay visible on E2EE servers. */
+.mx_EventTileBubble.mx_cryptoEvent:has(svg[color*="critical"]) {
+    display: none !important;
+}
+
+/* RoomSummaryCard right panel: hide only the "Не зашифровано" badge. The
+   encryption badge is always rendered first in the container; on the main
+   server it's data-kind="blue" (info). On E2EE rooms it's data-kind="green"
+   (success) and stays. "New members see history" is :nth-child(2+) and is
+   untouched. */
+.mx_RoomSummaryCard_badges > *:first-child[data-kind="blue"] {
+    display: none !important;
+}
+
+/* ErrorView (misconfigured / cannot_load_config / invalid_json /
+   app_launch_unexpected_error): replace the upstream Element app logo
+   (themes/element/img/logos/element-app-logo.png) with the Pressgram
+   blue circle so the brand is consistent on fatal error screens. */
+.mx_ErrorView_logo {
+    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><rect width='300' height='300' rx='150' fill='%231071E0'/><path d='M100.541 150.415H120V224.24H100.541V150.415Z' fill='white'/><path d='M180.811 150C180.811 132.82 167.198 118.894 150.405 118.894C133.613 118.894 120 132.82 120 150C120 167.179 133.613 181.106 150.405 181.106V201.013C122.866 201.013 100.541 178.174 100.541 150C100.541 121.826 122.866 98.9858 150.405 98.9858C177.945 98.9858 200.27 121.826 200.27 150C200.27 178.174 177.945 201.013 150.405 201.013V181.106C167.198 181.106 180.811 167.179 180.811 150Z' fill='white'/><path d='M150 60C199.706 60 240 100.294 240 150C240 199.706 199.706 240 150 240C145.595 240 141.263 239.683 137.027 239.072V218.911C141.222 219.685 145.556 220.092 150 220.092C189.379 220.092 220.541 188.286 220.541 150C220.541 111.714 189.379 79.9078 150 79.9078C110.621 79.9078 79.4595 111.714 79.4595 150C79.4595 177.824 95.858 202.181 120 213.462V234.877C85.0445 222.522 60 189.186 60 150C60 100.294 100.294 60 150 60Z' fill='white'/></svg>");
+    width: 160px;
+    height: 160px;
+}
