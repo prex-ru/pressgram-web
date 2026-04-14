@@ -36,4 +36,6 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
+    canCreateSection: true,
+    canMoveToSection: true,
 };
