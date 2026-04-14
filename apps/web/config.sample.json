@@ -13,7 +13,12 @@
     "disable_login_language_selector": false,
     "disable_3pid_login": false,
     "force_verification": false,
-    "brand": "Element",
+    "brand": "Pressgram",
+    "branding": {
+        "auth_header_logo_url": "themes/element/img/logos/element-logo.svg",
+        "welcome_background_url": "themes/element/img/backgrounds/pressgram-bg.jpg"
+    },
+    "default_country_code": "RU",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [
@@ -23,7 +28,6 @@
         "https://scalar-staging.vector.im/api"
     ],
     "default_widget_container_height": 280,
-    "default_country_code": "GB",
     "show_labs_settings": false,
     "features": {},
     "default_federate": true,
@@ -43,7 +47,7 @@
     },
     "element_call": {
         "url": "https://call.element.io",
-        "brand": "Element Call"
+        "brand": "Pressgram Call"
     },
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }
