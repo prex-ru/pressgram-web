@@ -1,8 +1,8 @@
 {
-    "name": "Element",
-    "short_name": "Element",
+    "name": "Pressgram",
+    "short_name": "Pressgram",
     "display": "standalone",
-    "theme_color": "#76CFA6",
+    "theme_color": "#1071e0",
     "start_url": "index.html",
     "icons": [
         {
@@ -21,7 +21,7 @@
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/152png",
+            "src": "/vector-icons/152.png",
             "sizes": "152x152",
             "type": "image/png"
         },
@@ -41,20 +41,5 @@
             "type": "image/png"
         }
     ],
-    "related_applications": [
-        {
-            "platform": "play",
-            "url": "https://play.google.com/store/apps/details?id=im.vector.app",
-            "id": "im.vector.app"
-        },
-        {
-            "platform": "f-droid",
-            "url": "https://f-droid.org/repository/browse/?fdid=im.vector.app",
-            "id": "im.vector.app"
-        },
-        {
-            "platform": "itunes",
-            "url": "https://apps.apple.com/app/vector/id1083446067"
-        }
-    ]
+    "related_applications": []
 }

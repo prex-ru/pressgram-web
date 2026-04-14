@@ -1,8 +1,10 @@
 <!doctype html>
-<html lang="en" style="height: 100%;">
+<html lang="ru" style="height: 100%;">
   <head>
     <meta charset="utf-8">
-    <title>Element</title>
+    <title>Pressgram</title>
+    <link rel="shortcut icon" href="<%= require('../../res/favicon.ico') %>">
+    <link rel="apple-touch-icon" href="<%= require('../../res/apple-touch-icon.png') %>">
     <link rel="apple-touch-icon" sizes="120x120" href="<%= require('../../res/vector-icons/120.png') %>">
     <link rel="apple-touch-icon" sizes="144x144" href="<%= require('../../res/vector-icons/144.png') %>">
     <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/152.png') %>">
@@ -13,10 +15,18 @@
     <link rel="icon" type="image/png" sizes="144x144" href="<%= require('../../res/vector-icons/144.png') %>">
     <link rel="icon" type="image/png" sizes="512x512" href="<%= require('../../res/vector-icons/512.png') %>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-title" content="Element">
-    <meta name="application-name" content="Element">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-title" content="Pressgram">
+    <meta name="application-name" content="Pressgram">
+    <meta name="theme-color" content="#1071e0">
+    <meta name="description" content="Независимая площадка для российского медиасообщества.">
+    <meta property="og:title" content="Pressgram" />
+    <meta property="og:site_name" content="Pressgram" />
+    <meta property="og:description" content="Независимая площадка для российского медиасообщества." />
     <meta property="og:image" content="<%= og_image_url %>" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pressgram" />
+    <meta name="twitter:description" content="Независимая площадка для российского медиасообщества." />
+    <meta name="twitter:image" content="<%= og_image_url %>" />
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'none';
         style-src 'self' 'unsafe-inline' <%= csp_extra_source %>;
@@ -52,7 +62,13 @@
 
   </head>
   <body style="height: 100%; margin: 0;">
-    <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=/unsupported_browser.html">
+      <p style="font-family: sans-serif; padding: 2rem; text-align: center;">
+        Для работы Pressgram нужен JavaScript.
+        <a href="/unsupported_browser.html">Подробнее</a>.
+      </p>
+    </noscript>
     <div id="matrixchat" style="height: 100%;" class="notranslate"></div>
 
 <%
