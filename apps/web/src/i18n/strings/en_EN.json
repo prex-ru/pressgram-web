@@ -43,7 +43,7 @@
         "copy_link": "Copy link",
         "create": "Create",
         "create_a_room": "Create a room",
-        "create_account": "Create Account",
+        "create_account": "Sign up",
         "decline": "Decline",
         "decline_and_block": "Decline and block",
         "decline_invite": "Decline invite",
@@ -591,7 +591,8 @@
         "video_room": "Video room",
         "view_message": "View message",
         "voice": "Voice",
-        "warning": "Warning"
+        "warning": "Warning",
+        "encryption_enabled": "Encryption enabled"
     },
     "composer": {
         "autocomplete": {
@@ -631,11 +632,11 @@
         "mode_plain": "Hide formatting",
         "mode_rich_text": "Show formatting",
         "no_perms_notice": "You do not have permission to post to this room",
-        "placeholder": "Send an unencrypted message…",
+        "placeholder": "Send a message…",
         "placeholder_encrypted": "Send a message…",
-        "placeholder_reply": "Send an unencrypted reply…",
+        "placeholder_reply": "Reply…",
         "placeholder_reply_encrypted": "Send a reply…",
-        "placeholder_thread": "Reply to unencrypted thread…",
+        "placeholder_thread": "Reply in thread…",
         "placeholder_thread_encrypted": "Reply to thread…",
         "poll_button": "Poll",
         "poll_button_no_perms_description": "You do not have permission to start polls in this room.",
@@ -1123,8 +1124,8 @@
     "error": {
         "admin_contact": "Please <a>contact your service administrator</a> to continue using this service.",
         "admin_contact_short": "Contact your <a>server admin</a>.",
-        "app_launch_unexpected_error": "Unexpected error preparing the app. See console for details.",
-        "cannot_load_config": "Unable to load config file: please refresh the page to try again.",
+        "app_launch_unexpected_error": "Unexpected error on startup. Refresh the page (Ctrl/Cmd+R) — that usually helps. If the problem repeats, email help@pressgram.ru.",
+        "cannot_load_config": "Could not load settings. Try refreshing the page (Ctrl/Cmd+R) — that usually clears a transient glitch. If the error persists, email help@pressgram.ru.",
         "connection": "There was a problem communicating with the homeserver, please try again later.",
         "dialog_description_default": "An error has occurred.",
         "download_media": "Failed to download source media, no source url was found",
@@ -1133,11 +1134,11 @@
         "hs_blocked": "This homeserver has been blocked by its administrator.",
         "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Invalid configuration: no default server specified.",
-        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
-        "invalid_json_detail": "The message from the parser is: %(message)s",
+        "invalid_json": "Pressgram configuration is corrupted. Try a hard refresh (Ctrl+Shift+R); if that doesn't help, report the issue to help@pressgram.ru.",
+        "invalid_json_detail": "Parser message: %(message)s",
         "invalid_json_generic": "Invalid JSON",
         "mau": "This homeserver has hit its Monthly Active User limit.",
-        "misconfigured": "Your Element is misconfigured",
+        "misconfigured": "Pressgram failed to start",
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
         "non_urgent_echo_failure_toast": "Your server isn't responding to some <a>requests</a>.",
         "resource_limits": "This homeserver has exceeded one of its resource limits.",
@@ -1521,7 +1522,7 @@
         "custom_themes": "Support adding custom themes",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
-        "element_call_video_rooms": "Element Call video rooms",
+        "element_call_video_rooms": "Pressgram Call video rooms",
         "encrypted_state_events": "Encrypted state events (MSC4362)",
         "encrypted_state_events_description": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
         "exclude_insecure_devices": "Exclude insecure devices when sending/receiving messages",
@@ -1529,7 +1530,7 @@
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
-        "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_disable_call_per_sender_encryption": "Disable Pressgram Call per-sender encryption",
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
         "group_calls": "New group call experience",
         "group_developer": "Developer",
@@ -1814,7 +1815,7 @@
         "restricted": "Restricted"
     },
     "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
+    "powered_by_matrix_with_logo": "Secure decentralised communication powered by $matrixLogo",
     "presence": {
         "away": "Away",
         "busy": "Busy",
@@ -2139,7 +2140,12 @@
         },
         "video_room": "This room is a video room",
         "waiting_for_join_subtitle": "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted",
-        "waiting_for_join_title": "Waiting for users to join %(brand)s"
+        "waiting_for_join_title": "Waiting for users to join %(brand)s",
+        "history_visibility_badge": {
+            "private": "History hidden",
+            "shared": "History open",
+            "world_readable": "History public"
+        }
     },
     "room_list": {
         "add_room_label": "Add room",
@@ -3351,7 +3357,8 @@
         "creation_summary_room": "%(creator)s created and configured the room.",
         "decryption_failure": {
             "sender_identity_previously_verified": "Sender's verified digital identity was reset",
-            "unable_to_decrypt": "Unable to decrypt message"
+            "unable_to_decrypt": "Unable to decrypt message",
+            "historical_event_unverified_device": "Verify this device to access message history"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Decrypting",
@@ -3753,7 +3760,17 @@
             "one_user": "%(displayName)s is typing …",
             "two_users": "%(names)s and %(lastPerson)s are typing …"
         },
-        "undecryptable_tooltip": "This message could not be decrypted"
+        "undecryptable_tooltip": "This message could not be decrypted",
+        "m.room.encryption": {
+            "disable_attempt": "Attempt to disable encryption ignored",
+            "disabled": "Encryption is not enabled",
+            "enabled": "Messages in this room are end-to-end encrypted. When new members join, you can verify them from their profile — tap the avatar below.",
+            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s from their profile — tap the avatar below.",
+            "enabled_local": "Messages in this chat will be end-to-end encrypted.",
+            "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When new members join, you can verify them from their profile — tap the avatar below.",
+            "unsupported": "This room's encryption type is not supported."
+        }
     },
     "truncated_list_n_more": {
         "other": "And %(count)s more..."
@@ -3913,7 +3930,7 @@
         "disabled_no_perms_start_video_call": "You do not have permission to start video calls",
         "disabled_no_perms_start_voice_call": "You do not have permission to start voice calls",
         "disabled_ongoing_call": "Ongoing call",
-        "element_call": "Element Call",
+        "element_call": "Pressgram Call",
         "enable_camera": "Turn on camera",
         "enable_microphone": "Unmute microphone",
         "expand": "Return to call",
@@ -3985,7 +4002,7 @@
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Welcome to Element",
+    "welcome_to_element": "Welcome to Pressgram",
     "widget": {
         "added_by": "Widget added by",
         "capabilities_dialog": {
