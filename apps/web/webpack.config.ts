@@ -713,6 +713,8 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     "res/manifest.json",
                     "res/welcome.html",
                     "res/custom.css",
+                    "res/favicon.ico",
+                    "res/apple-touch-icon.png",
                     "res/pressgram-compat.js",
                     "res/unsupported_browser.html",
                     { from: "welcome/**", context: path.resolve(__dirname, "res") },
