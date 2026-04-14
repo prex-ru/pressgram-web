@@ -110,18 +110,27 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     //   https://pgram.im/?server=news.pgram.im&token=PREX2026
     // so non-technical users don't have to type server names or paste invite codes.
     // Requires nginx SPA fallback (try_files ... /index.html) for path-based form.
-    let serverOverride: string | undefined;
-    let regToken: string | undefined;
+    // Normalise /join/<server>[/<token>] to the ?server=&token= query form and
+    // do a full reload so the rest of bootstrap (config, router, platform)
+    // sees the canonical URL. Mixing pathname rewrite with a hash change and
+    // a pending verifyServerConfig in a single tick caused the app to mount
+    // against an inconsistent URL state and render blank.
     const pathMatch = window.location.pathname.match(/^\/join\/([^/]+)(?:\/([^/]+))?\/?$/);
     if (pathMatch) {
-        serverOverride = decodeURIComponent(pathMatch[1]);
-        if (pathMatch[2]) regToken = decodeURIComponent(pathMatch[2]);
-        // Rewrite URL to clean root so reload / share doesn't re-trigger.
-        window.history.replaceState(null, "", "/" + window.location.hash);
-    } else {
-        if (typeof params.server === "string" && params.server.length > 0) serverOverride = params.server;
-        if (typeof params.token === "string" && params.token.length > 0) regToken = params.token;
+        const normalised = new URL(window.location.href);
+        normalised.pathname = "/";
+        normalised.searchParams.set("server", decodeURIComponent(pathMatch[1]));
+        if (pathMatch[2]) normalised.searchParams.set("token", decodeURIComponent(pathMatch[2]));
+        window.location.replace(normalised.href);
+        // Block further bootstrap — the page is about to reload on the new URL.
+        await new Promise(() => {});
+        return;
     }
+
+    let serverOverride: string | undefined;
+    let regToken: string | undefined;
+    if (typeof params.server === "string" && params.server.length > 0) serverOverride = params.server;
+    if (typeof params.token === "string" && params.token.length > 0) regToken = params.token;
 
     // Persist server override across OIDC round-trips (MAS cancel/error returns us here
     // without the deep-link params). Cleared only when user explicitly closes the tab or
@@ -154,7 +163,7 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
         window.location.hash = "#/register";
     }
 
-    if ((serverOverride || regToken) && !pathMatch) {
+    if (serverOverride || regToken) {
         // Strip deep-link params from URL so they don't leak on reload / share.
         const cleanUrl = new URL(window.location.href);
         cleanUrl.searchParams.delete("server");
