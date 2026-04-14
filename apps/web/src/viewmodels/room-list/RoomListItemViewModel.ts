@@ -303,6 +303,9 @@ export class RoomListItemViewModel
             canMarkAsRead,
             canMarkAsUnread,
             roomNotifState,
+            // To be implemented when custom section creation is added in vms
+            canCreateSection: false,
+            canMoveToSection: false,
         };
     }
 
@@ -380,5 +383,9 @@ export class RoomListItemViewModel
         // Set the notification state using EchoChamber
         const echoChamber = EchoChamber.forRoom(this.props.room);
         echoChamber.notificationVolume = elementNotifState;
+    };
+
+    public onCreateSection = (): void => {
+        // To be implemented when custom section creation is added in vms
     };
 }
