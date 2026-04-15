@@ -2,7 +2,6 @@
 <html lang="ru" style="height: 100%;">
   <head>
     <meta charset="utf-8">
-    <base href="/">
     <title>Pressgram</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -28,6 +27,22 @@
     <meta name="twitter:title" content="Pressgram" />
     <meta name="twitter:description" content="Независимая площадка для российского медиасообщества." />
     <meta name="twitter:image" content="<%= og_image_url %>" />
+    <!-- Pressgram deep-link normaliser: rewrite /join/<server>[/<token>]
+         to /?server=&token= BEFORE the bundle fetches config.json. The
+         path-form otherwise makes every relative fetch resolve against
+         /join/<server>/, including config.json, which the SPA fallback
+         returns as index.html and breaks JSON.parse. -->
+    <script>
+      (function () {
+        var m = window.location.pathname.match(/^\/join\/([^\/]+)(?:\/([^\/]+))?\/?$/);
+        if (!m) return;
+        var url = new URL(window.location.href);
+        url.pathname = "/";
+        url.searchParams.set("server", decodeURIComponent(m[1]));
+        if (m[2]) url.searchParams.set("token", decodeURIComponent(m[2]));
+        window.location.replace(url.href);
+      })();
+    </script>
     <!-- Pressgram browser compat: runs before the bundle so localStorage
          flags and the pressgramShowUnsupported hook exist when init.tsx
          decides whether to show the upstream UnsupportedBrowserView. -->
