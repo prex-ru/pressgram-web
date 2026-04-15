@@ -149,7 +149,19 @@ async function start(): Promise<void> {
             const isAndroid = /Android/.test(navigator.userAgent);
             if (isIos || isAndroid) {
                 if (document.cookie.indexOf("element_mobile_redirect_to_guide=false") === -1) {
-                    window.location.href = "mobile_guide/";
+                    // Pressgram: forward /join/<server>[/<token>] or ?server=&token= into
+                    // mobile_guide query so the "Войти в Pressgram" deep-link button points
+                    // at the community server rather than the pgram.im default.
+                    let mobileGuideQuery = "";
+                    const joinMatch = window.location.pathname.match(/^\/join\/([^/]+)(?:\/([^/]+))?\/?$/);
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const pgServer = joinMatch ? decodeURIComponent(joinMatch[1]) : urlParams.get("server");
+                    const pgToken = joinMatch && joinMatch[2] ? decodeURIComponent(joinMatch[2]) : urlParams.get("token");
+                    if (pgServer) {
+                        mobileGuideQuery = "?server=" + encodeURIComponent(pgServer);
+                        if (pgToken) mobileGuideQuery += "&token=" + encodeURIComponent(pgToken);
+                    }
+                    window.location.href = "/mobile_guide/" + mobileGuideQuery;
                     return;
                 }
             }

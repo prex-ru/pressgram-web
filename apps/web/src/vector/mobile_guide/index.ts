@@ -48,10 +48,23 @@ async function initPage(): Promise<void> {
     // We manually parse the config similar to how validateServerConfig works because
     // calling that function pulls in roughly 4mb of JS we don't use.
 
-    const wkConfig = config?.["default_server_config"]; // overwritten later under some conditions
+    let wkConfig = config?.["default_server_config"]; // overwritten later under some conditions
     let serverName = config?.["default_server_name"];
-    const defaultHsUrl = config?.["default_hs_url"];
-    const defaultIsUrl = config?.["default_is_url"];
+    let defaultHsUrl = config?.["default_hs_url"];
+    let defaultIsUrl = config?.["default_is_url"];
+
+    // Pressgram deep-link: /join/<server>[/<token>] on pgram.im forwards ?server= here so
+    // that community-server invites open the "Войти в Pressgram" deep-link against the
+    // target homeserver instead of the default pgram.im. Token is ignored on mobile —
+    // Element X handles the invite flow after the account_provider handoff.
+    const pgServer = new URLSearchParams(window.location.search).get("server");
+    if (pgServer) {
+        serverName = pgServer;
+        // Force .well-known lookup against the override: clear conflicting defaults.
+        wkConfig = undefined;
+        defaultHsUrl = undefined;
+        defaultIsUrl = undefined;
+    }
 
     const appVariant = (config?.["mobile_guide_app_variant"] as MobileAppVariant) ?? MobileAppVariant.X;
     const metadata = mobileApps[appVariant] ?? mobileApps[MobileAppVariant.X]; // Additional fallback in case mobile_guide_app_variant has an unexpected value.
